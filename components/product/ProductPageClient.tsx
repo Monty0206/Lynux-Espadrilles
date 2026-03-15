@@ -73,8 +73,6 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   const product = getProductBySlug(slug)
 
   const [mainImage, setMainImage] = useState<string>(product?.images[0] ?? '')
-  const [imageOpacity, setImageOpacity] = useState(1)
-  const [colourBadge, setColourBadge] = useState<string | null>(null)
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [selectedJute, setSelectedJute] = useState<string | null>(null)
   const [selectedToe, setSelectedToe] = useState<string | null>(null)
@@ -117,28 +115,8 @@ export default function ProductPageClient({ slug }: { slug: string }) {
     return `Please select ${missing.join(' and ')} to continue`
   }
 
-  const switchImage = (newSrc: string) => {
-    if (newSrc === mainImage) return
-    setImageOpacity(0)
-    setTimeout(() => {
-      setMainImage(newSrc)
-      setImageOpacity(1)
-    }, 150)
-  }
-
-  const handleColourSelect = (colourName: string) => {
-    setSelectedColour(colourName)
-    const colour = product.colours.find(c => c.name === colourName)
-    if (colour?.image) {
-      setColourBadge(null)
-      switchImage(colour.image)
-    } else {
-      setColourBadge(colourName)
-    }
-  }
-
   const handleThumbnailClick = (img: string) => {
-    switchImage(img)
+    setMainImage(img)
   }
 
   const handleAddToCart = () => {
@@ -192,18 +170,9 @@ export default function ProductPageClient({ slug }: { slug: string }) {
                     alt={product.name}
                     fill
                     className="object-cover"
-                    style={{ opacity: imageOpacity, transition: 'opacity 150ms ease' }}
                     sizes="(max-width: 1024px) 100vw, 60vw"
                     priority
                   />
-                )}
-                {colourBadge && (
-                  <div
-                    className="absolute bottom-3 left-3 bg-clay text-cream px-3 py-1 text-sm font-dm"
-                    style={{ borderRadius: '999px', animation: 'fadeIn 150ms ease' }}
-                  >
-                    Available in {colourBadge}
-                  </div>
                 )}
               </div>
               {product.images.length > 1 && (
@@ -329,7 +298,7 @@ export default function ProductPageClient({ slug }: { slug: string }) {
                             </div>
                           )}
                           <button
-                            onClick={() => handleColourSelect(colour.name)}
+                            onClick={() => setSelectedColour(colour.name)}
                             onMouseEnter={() => handleTooltipEnter(colour.name)}
                             onMouseLeave={handleTooltipLeave}
                             title={colour.name}
