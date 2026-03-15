@@ -40,4 +40,5 @@ export interface CartItem {
   toe: string
   quantity: number
   cartId: string
+  colourImage: string | null
 }

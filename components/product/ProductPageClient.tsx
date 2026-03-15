@@ -128,7 +128,8 @@ export default function ProductPageClient({ slug }: { slug: string }) {
 
   const handleAddToCart = () => {
     if (!isComplete) return
-    addToCart(product, selectedSize!, selectedColour ?? '', selectedJute ?? '', selectedToe ?? '', quantity)
+    const colourImage = product.colours.find(c => c.name === selectedColour)?.image ?? null
+    addToCart(product, selectedSize!, selectedColour ?? '', selectedJute ?? '', selectedToe ?? '', quantity, colourImage)
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 2000)
   }

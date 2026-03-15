@@ -5,7 +5,7 @@ import { Product, CartItem } from '@/types'
 
 interface CartContextType {
   cartItems: CartItem[]
-  addToCart: (product: Product, size: number, colour: string, jute: string, toe: string, quantity: number) => void
+  addToCart: (product: Product, size: number, colour: string, jute: string, toe: string, quantity: number, colourImage: string | null) => void
   removeFromCart: (cartId: string) => void
   updateQuantity: (cartId: string, quantity: number) => void
   cartCount: number
@@ -17,7 +17,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
 
-  const addToCart = (product: Product, size: number, colour: string, jute: string, toe: string, quantity: number) => {
+  const addToCart = (product: Product, size: number, colour: string, jute: string, toe: string, quantity: number, colourImage: string | null) => {
     const cartId = `${product.id}-${size}-${colour}-${jute}-${toe}`
     setCartItems(prev => {
       const existing = prev.find(item => item.cartId === cartId)
@@ -28,7 +28,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             : item
         )
       }
-      return [...prev, { product, size, colour, jute, toe, quantity, cartId }]
+      return [...prev, { product, size, colour, jute, toe, quantity, cartId, colourImage }]
     })
   }
 

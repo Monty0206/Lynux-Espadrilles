@@ -37,7 +37,7 @@ export default function CartPage() {
             <div key={item.cartId} className="flex gap-6 py-6 border-b border-sand-dark">
               <div className="relative w-24 h-24 bg-sand flex-shrink-0">
                 <Image
-                  src={item.product.image}
+                  src={item.colourImage || item.product.image}
                   alt={item.product.name}
                   fill
                   className="object-cover"
