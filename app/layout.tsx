@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import WhatsAppButton from '@/components/ui/WhatsAppButton'
+import CursorSpotlight from '@/components/ui/CursorSpotlight'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -38,6 +39,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
           <WhatsAppButton />
+          <CursorSpotlight />
         </CartProvider>
       </body>
     </html>

@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getProductBySlug, getAllProducts } from '@/lib/products'
 import { useCart } from '@/app/context/CartContext'
 import ProductCard from '@/components/shop/ProductCard'
+import { Colour } from '@/types'
 
 const formatPrice = (price: number): string =>
   'R' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -78,12 +79,21 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   const [selectedJute, setSelectedJute] = useState<string | null>(null)
   const [selectedToe, setSelectedToe] = useState<string | null>(null)
   const [selectedColour, setSelectedColour] = useState<string | null>(null)
+  const [hoveredColour, setHoveredColour] = useState<Colour | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [showSizeGuide, setShowSizeGuide] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
   const [tooltipTimeout, setTooltipTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
+  const [stickyVisible, setStickyVisible] = useState(false)
   const { addToCart } = useCart()
+
+  // Sticky bar scroll listener
+  useEffect(() => {
+    const handler = () => setStickyVisible(window.scrollY > 500)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
 
   if (!product) {
     return (
@@ -122,10 +132,6 @@ export default function ProductPageClient({ slug }: { slug: string }) {
     setTimeout(() => { setMainImage(newSrc); setImageOpacity(1) }, 150)
   }
 
-  const handleThumbnailClick = (img: string) => {
-    switchImage(img)
-  }
-
   const handleAddToCart = () => {
     if (!isComplete) return
     const colourImage = product.colours.find(c => c.name === selectedColour)?.image ?? null
@@ -152,9 +158,60 @@ export default function ProductPageClient({ slug }: { slug: string }) {
         : 'bg-cream border-sand-dark text-ink hover:bg-sand'
     }`
 
+  // Sticky bar options summary
+  const optionsSummary = (() => {
+    const parts = []
+    if (selectedSize) parts.push(`Size ${selectedSize}`)
+    if (selectedColour) parts.push(selectedColour)
+    if (selectedJute) parts.push(selectedJute)
+    if (selectedToe) parts.push(selectedToe)
+    return parts.length ? parts.join(' · ') : 'Select options'
+  })()
+
+  const thumbnailSrc = (product.colours.find(c => c.name === selectedColour)?.image) || product.image
+
   return (
     <>
       {showSizeGuide && <SizeGuideModal onClose={() => setShowSizeGuide(false)} />}
+
+      {/* ── Sticky add-to-cart bar ── */}
+      <div
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0, height: 64,
+          background: 'white',
+          borderBottom: '1px solid #EAE3D2',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          zIndex: 40,
+          display: 'flex', alignItems: 'center',
+          padding: '0 24px',
+          gap: 16,
+          transform: stickyVisible ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'transform 300ms ease',
+        }}
+      >
+        <div className="relative w-10 h-10 flex-shrink-0 overflow-hidden rounded bg-sand">
+          <Image src={thumbnailSrc} alt={product.name} fill className="object-cover" sizes="40px" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-cormorant font-semibold text-base text-ink leading-none">{product.name}</p>
+          <p className="font-dm text-xs text-ink-light mt-0.5 truncate">{optionsSummary}</p>
+        </div>
+        <p className="font-dm text-sm text-ink-mid flex-shrink-0 hidden sm:block">
+          {formatPrice(product.price)}
+        </p>
+        <button
+          onClick={handleAddToCart}
+          disabled={!isComplete}
+          className={`flex-shrink-0 px-6 py-2 font-dm text-xs font-medium tracking-widest uppercase transition-all duration-200 ${
+            isComplete
+              ? addedToCart ? 'bg-clay-dark text-cream' : 'bg-clay hover:bg-clay-dark text-cream'
+              : 'bg-sand-dark text-ink-light cursor-not-allowed'
+          }`}
+        >
+          {addedToCart ? 'Added ✓' : 'Add to Cart'}
+        </button>
+      </div>
+
       <div className="pt-20 lg:pt-24 min-h-screen bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
 
@@ -183,13 +240,25 @@ export default function ProductPageClient({ slug }: { slug: string }) {
                     priority
                   />
                 )}
+                {/* Colour tint overlay (Upgrade 6) */}
+                <div
+                  aria-hidden
+                  style={{
+                    position: 'absolute', inset: 0,
+                    backgroundColor: hoveredColour?.hex ?? 'transparent',
+                    opacity: hoveredColour?.hex ? 0.25 : 0,
+                    mixBlendMode: 'multiply',
+                    transition: 'opacity 200ms ease',
+                    pointerEvents: 'none',
+                  }}
+                />
               </div>
               {product.images.length > 1 && (
                 <div className="flex gap-3 flex-wrap">
                   {product.images.map((img, i) => (
                     <button
                       key={i}
-                      onClick={() => handleThumbnailClick(img)}
+                      onClick={() => switchImage(img)}
                       className={`relative w-20 h-20 flex-shrink-0 overflow-hidden border-2 transition-all duration-200 ${
                         mainImage === img ? 'border-clay' : 'border-transparent hover:border-sand-dark'
                       }`}
@@ -311,13 +380,17 @@ export default function ProductPageClient({ slug }: { slug: string }) {
                               setSelectedColour(colour.name)
                               if (colour.image) switchImage(colour.image)
                             }}
-                            onMouseEnter={() => handleTooltipEnter(colour.name)}
-                            onMouseLeave={handleTooltipLeave}
+                            onMouseEnter={() => {
+                              handleTooltipEnter(colour.name)
+                              setHoveredColour(colour)
+                            }}
+                            onMouseLeave={() => {
+                              handleTooltipLeave()
+                              setHoveredColour(null)
+                            }}
                             title={colour.name}
                             style={{
-                              width: '40px',
-                              height: '40px',
-                              borderRadius: '50%',
+                              width: '40px', height: '40px', borderRadius: '50%',
                               background: colour.hex
                                 ? colour.hex
                                 : 'conic-gradient(#FF6B6B, #FFD93D, #6BCB77, #4D96FF, #C77DFF, #FF6B6B)',

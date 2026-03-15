@@ -5,14 +5,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const heroSlides = [
-  { src: "/images/the-lynux.png", name: "The Lynux", price: "From R1,099.00", slug: "the-lynux" },
-  { src: "/images/the-mule-3.jpg", name: "The Mule", price: "From R1,299.00", slug: "the-mule" },
-  { src: "/images/florencia-cerrada.jpg", name: "Florencia Cerrada", price: "From R1,499.00", slug: "florencia-cerrada" },
-  { src: "/images/lucia-wedge.png", name: "Lucia Wedge", price: "From R1,299.00", slug: "lucia-wedge" },
-  { src: "/images/the-bella.jpg", name: "The Bella", price: "From R999.00", slug: "the-bella" },
-  { src: "/images/valeria.png", name: "Valeria", price: "From R1,099.00", slug: "valeria" },
-  { src: "/images/ariana.png", name: "Ariana", price: "From R1,099.00", slug: "ariana" },
-  { src: "/images/carnero-slipper.jpg", name: "Carnero Slipper", price: "From R1,299.00", slug: "carnero-slipper" },
+  { src: "/images/the-lynux.png",         name: "The Lynux",        price: "From R1,099.00", slug: "the-lynux",        tagline: "Shoes made",      taglineItalic: "for every",  taglineEnd: "occasion"  },
+  { src: "/images/the-mule-3.jpg",        name: "The Mule",         price: "From R1,299.00", slug: "the-mule",         tagline: "Step into",       taglineItalic: "effortless", taglineEnd: "style"     },
+  { src: "/images/florencia-cerrada.jpg", name: "Florencia Cerrada",price: "From R1,499.00", slug: "florencia-cerrada",tagline: "Closed toe,",     taglineItalic: "open",       taglineEnd: "heart"     },
+  { src: "/images/lucia-wedge.png",       name: "Lucia Wedge",      price: "From R1,299.00", slug: "lucia-wedge",      tagline: "Elevate",         taglineItalic: "every",      taglineEnd: "step"      },
+  { src: "/images/the-bella.jpg",         name: "The Bella",        price: "From R999.00",   slug: "the-bella",        tagline: "Crafted",         taglineItalic: "with",       taglineEnd: "love"      },
+  { src: "/images/valeria.png",           name: "Valeria",          price: "From R1,099.00", slug: "valeria",          tagline: "Made",            taglineItalic: "just",       taglineEnd: "for you"   },
+  { src: "/images/ariana.png",            name: "Ariana",           price: "From R1,099.00", slug: "ariana",           tagline: "Bold colours,",   taglineItalic: "gentle",     taglineEnd: "comfort"   },
+  { src: "/images/carnero-slipper.jpg",   name: "Carnero Slipper",  price: "From R1,299.00", slug: "carnero-slipper",  tagline: "Wrap your feet",  taglineItalic: "in pure",    taglineEnd: "softness"  },
 ]
 
 const INTERVAL = 4000
@@ -24,6 +24,8 @@ export default function Hero() {
   const [nextIndex, setNextIndex] = useState<number | null>(null)
   const [transitioning, setTransitioning] = useState(false)
   const [badgeVisible, setBadgeVisible] = useState(true)
+  const [taglineVisible, setTaglineVisible] = useState(true)
+  const [displayedTaglineIndex, setDisplayedTaglineIndex] = useState(0)
   const [hovered, setHovered] = useState(false)
   const [arrowsVisible, setArrowsVisible] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -40,12 +42,17 @@ export default function Hero() {
     setTransitioning(true)
     setNextIndex(index)
     setBadgeVisible(false)
+    // Fade out tagline
+    setTaglineVisible(false)
     setTimeout(() => {
       setCurrentIndex(index)
+      setDisplayedTaglineIndex(index)
       setNextIndex(null)
       setTransitioning(false)
       transitioningRef.current = false
       setBadgeVisible(true)
+      // Fade in tagline after a short delay
+      setTimeout(() => setTaglineVisible(true), 200)
     }, FADE_DURATION)
   }, [currentIndex])
 
@@ -68,36 +75,44 @@ export default function Hero() {
 
   const current = heroSlides[currentIndex]
   const next = nextIndex !== null ? heroSlides[nextIndex] : null
+  const taglineSlide = heroSlides[displayedTaglineIndex]
 
   return (
     <section style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden', background: '#FDFCF9' }}>
 
       {/* ── Left panel ── */}
       <div
+        className="hero-left"
         style={{
           flex: '0 0 50%',
           display: 'flex',
           alignItems: 'center',
           background: '#FDFCF9',
           paddingTop: 80,
-          // on mobile this panel goes full-width via the media-query class below
         }}
-        className="hero-left"
       >
         <div
-          className={`transition-all duration-700 ease-out ${
-            visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-          style={{ padding: '0 clamp(24px, 6vw, 80px) 0 clamp(24px, 6vw, 80px)', width: '100%' }}
+          className={`transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          style={{ padding: '0 clamp(24px, 6vw, 80px)', width: '100%' }}
         >
           <p className="font-dm text-xs tracking-[0.25em] uppercase text-clay font-medium mb-6">
             Handcrafted in South Africa
           </p>
-          <h1 className="font-cormorant font-semibold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-ink leading-[1.05] mb-6">
-            Shoes made<br />
-            <span className="italic text-clay-dark">for every</span><br />
-            occasion
+
+          {/* Dynamic tagline */}
+          <h1
+            className="font-cormorant font-semibold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-ink leading-[1.05] mb-6"
+            style={{
+              opacity: taglineVisible ? 1 : 0,
+              transform: taglineVisible ? 'translateY(0)' : 'translateY(-10px)',
+              transition: 'opacity 300ms ease, transform 300ms ease',
+            }}
+          >
+            {taglineSlide.tagline}<br />
+            <span className="italic" style={{ color: '#C8A97E' }}>{taglineSlide.taglineItalic}</span><br />
+            {taglineSlide.taglineEnd}
           </h1>
+
           <p className="font-dm text-base lg:text-lg text-ink-light leading-relaxed mb-10 max-w-md">
             Luxury espadrilles handcrafted with French and Spanish inspiration. Comfort in every way.
           </p>
@@ -120,9 +135,7 @@ export default function Hero() {
 
       {/* ── Right panel ── */}
       <div
-        className={`hero-right transition-all duration-700 delay-200 ease-out ${
-          visible ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`hero-right transition-all duration-700 delay-200 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
         style={{ flex: '0 0 50%', position: 'relative', overflow: 'hidden' }}
         onMouseEnter={() => { setHovered(true); setArrowsVisible(true) }}
         onMouseLeave={() => { setHovered(false); setArrowsVisible(false) }}
@@ -152,18 +165,11 @@ export default function Hero() {
 
         {/* Preload hidden slides */}
         {heroSlides.slice(1).map(slide => (
-          <Image
-            key={slide.slug}
-            src={slide.src}
-            alt=""
-            fill
-            sizes="1px"
-            style={{ opacity: 0, pointerEvents: 'none' }}
-            aria-hidden
-          />
+          <Image key={slide.slug} src={slide.src} alt="" fill sizes="1px"
+            style={{ opacity: 0, pointerEvents: 'none' }} aria-hidden />
         ))}
 
-        {/* Blend gradient — left edge fades into cream */}
+        {/* Blend gradient */}
         <div
           className="hero-blend"
           style={{
@@ -174,9 +180,7 @@ export default function Hero() {
         />
 
         {/* Left arrow */}
-        <button
-          onClick={e => { e.preventDefault(); goBack() }}
-          aria-label="Previous slide"
+        <button onClick={e => { e.preventDefault(); goBack() }} aria-label="Previous slide"
           style={{
             position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
@@ -184,17 +188,12 @@ export default function Hero() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             opacity: arrowsVisible ? 1 : 0, transition: 'opacity 250ms ease',
             zIndex: 10, border: 'none', cursor: 'pointer',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
+          }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
 
         {/* Right arrow */}
-        <button
-          onClick={e => { e.preventDefault(); advance() }}
-          aria-label="Next slide"
+        <button onClick={e => { e.preventDefault(); advance() }} aria-label="Next slide"
           style={{
             position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)',
             width: 36, height: 36, borderRadius: '50%',
@@ -202,23 +201,14 @@ export default function Hero() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             opacity: arrowsVisible ? 1 : 0, transition: 'opacity 250ms ease',
             zIndex: 10, border: 'none', cursor: 'pointer',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
+          }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
 
         {/* Navigation dots */}
-        <div style={{
-          position: 'absolute', bottom: 24, left: 0, right: 0,
-          display: 'flex', justifyContent: 'center', gap: 6, zIndex: 10,
-        }}>
+        <div style={{ position: 'absolute', bottom: 24, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 6, zIndex: 10 }}>
           {heroSlides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goToSlide(i)}
-              aria-label={`Go to slide ${i + 1}`}
+            <button key={i} onClick={() => goToSlide(i)} aria-label={`Go to slide ${i + 1}`}
               style={{
                 width: i === currentIndex ? 10 : 8,
                 height: i === currentIndex ? 10 : 8,
@@ -232,8 +222,7 @@ export default function Hero() {
         </div>
 
         {/* Product badge */}
-        <Link
-          href={`/product/${current.slug}`}
+        <Link href={`/product/${current.slug}`}
           style={{
             position: 'absolute', bottom: 32, left: 32,
             background: 'rgba(255,255,255,0.90)',
@@ -246,35 +235,23 @@ export default function Hero() {
             transition: 'opacity 300ms ease',
             textDecoration: 'none',
             display: 'block',
-          }}
-        >
+          }}>
           <p className="font-dm text-[10px] tracking-[0.15em] uppercase text-ink-light">Now Viewing</p>
           <p className="font-cormorant font-semibold text-lg text-ink leading-tight">{current.name}</p>
           <p className="font-dm text-xs text-ink-mid">{current.price}</p>
         </Link>
       </div>
 
-      {/* Mobile styles */}
+      {/* Mobile / responsive styles */}
       <style>{`
         @media (max-width: 1023px) {
-          section {
-            flex-direction: column;
-          }
-          .hero-left {
-            flex: none !important;
-            width: 100% !important;
-            padding-top: 80px !important;
-            padding-bottom: 32px !important;
-          }
-          .hero-right {
-            flex: none !important;
-            width: 100% !important;
-            height: 60vw !important;
-            min-height: 280px !important;
-          }
-          .hero-blend {
-            display: none !important;
-          }
+          section { flex-direction: column; }
+          .hero-left { flex: none !important; width: 100% !important; padding-top: 80px !important; padding-bottom: 32px !important; }
+          .hero-right { flex: none !important; width: 100% !important; height: 60vw !important; min-height: 280px !important; }
+          .hero-blend { display: none !important; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
         }
       `}</style>
     </section>
