@@ -73,6 +73,7 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   const product = getProductBySlug(slug)
 
   const [mainImage, setMainImage] = useState<string>(product?.images[0] ?? '')
+  const [imageOpacity, setImageOpacity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [selectedJute, setSelectedJute] = useState<string | null>(null)
   const [selectedToe, setSelectedToe] = useState<string | null>(null)
@@ -115,8 +116,14 @@ export default function ProductPageClient({ slug }: { slug: string }) {
     return `Please select ${missing.join(' and ')} to continue`
   }
 
+  const switchImage = (newSrc: string) => {
+    if (newSrc === mainImage) return
+    setImageOpacity(0)
+    setTimeout(() => { setMainImage(newSrc); setImageOpacity(1) }, 150)
+  }
+
   const handleThumbnailClick = (img: string) => {
-    setMainImage(img)
+    switchImage(img)
   }
 
   const handleAddToCart = () => {
@@ -170,6 +177,7 @@ export default function ProductPageClient({ slug }: { slug: string }) {
                     alt={product.name}
                     fill
                     className="object-cover"
+                    style={{ opacity: imageOpacity, transition: 'opacity 150ms ease' }}
                     sizes="(max-width: 1024px) 100vw, 60vw"
                     priority
                   />
@@ -298,7 +306,10 @@ export default function ProductPageClient({ slug }: { slug: string }) {
                             </div>
                           )}
                           <button
-                            onClick={() => setSelectedColour(colour.name)}
+                            onClick={() => {
+                              setSelectedColour(colour.name)
+                              if (colour.image) switchImage(colour.image)
+                            }}
                             onMouseEnter={() => handleTooltipEnter(colour.name)}
                             onMouseLeave={handleTooltipLeave}
                             title={colour.name}

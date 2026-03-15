@@ -1,6 +1,7 @@
 export interface Colour {
   name: string
   hex: string | null
+  image?: string | null
 }
 
 export interface Review {

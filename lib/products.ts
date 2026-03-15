@@ -127,18 +127,15 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double"],
     toeOptions: [],
     colours: [
-      { name: "Baby Pink", hex: "#F4C2C2" },
-      { name: "Black", hex: "#1C1A17" },
-      { name: "Grey", hex: "#9E9E9E" },
-      { name: "Ivory", hex: "#FFFFF0" },
-      { name: "Khaki", hex: "#C3B091" },
-      { name: "Multi-Color", hex: null },
-      { name: "Navy", hex: "#003153" },
-      { name: "Nude", hex: "#E8CFB0" },
-      { name: "Olive", hex: "#6B7C45" },
-      { name: "Orange", hex: "#E07B39" },
-      { name: "Rustic", hex: "#8B4513" },
-      { name: "White", hex: "#FDFCF9" }
+      { name: "Baby Pink", hex: "#F4C2C2", image: null },
+      { name: "Black", hex: "#1C1A17", image: "/images/the-lynux-3.jpg" },
+      { name: "Grey", hex: "#9E9E9E", image: null },
+      { name: "Ivory", hex: "#FFFFF0", image: null },
+      { name: "Khaki", hex: "#C3B091", image: "/images/the-lynux-6.jpg" },
+      { name: "Multi-Color", hex: null, image: "/images/the-lynux.png" },
+      { name: "Navy", hex: "#003153", image: "/images/the-lynux-7.jpg" },
+      { name: "Nude", hex: "#E8CFB0", image: "/images/the-lynux-4.jpg" },
+      { name: "Olive", hex: "#6B7C45", image: "/images/the-lynux-5.jpg" }
     ],
     image: "/images/the-lynux.png",
     images: [
@@ -183,8 +180,8 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double"],
     toeOptions: ["Open Toe", "Closed Toe"],
     colours: [
-      { name: "Black", hex: "#1C1A17" },
-      { name: "Brown", hex: "#7B4F2E" }
+      { name: "Black", hex: "#1C1A17", image: "/images/the-mule-2.jpg" },
+      { name: "Brown", hex: "#7B4F2E", image: "/images/the-mule.webp" }
     ],
     image: "/images/the-mule.webp",
     images: [
