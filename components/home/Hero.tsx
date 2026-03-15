@@ -24,8 +24,9 @@ export default function Hero() {
   const [nextIndex, setNextIndex] = useState<number | null>(null)
   const [transitioning, setTransitioning] = useState(false)
   const [badgeVisible, setBadgeVisible] = useState(true)
-  const [taglineVisible, setTaglineVisible] = useState(true)
-  const [displayedTaglineIndex, setDisplayedTaglineIndex] = useState(0)
+  const [taglineA, setTaglineA] = useState(heroSlides[0])
+  const [taglineB, setTaglineB] = useState(heroSlides[1 % heroSlides.length])
+  const [activeLayer, setActiveLayer] = useState<'a' | 'b'>('a')
   const [hovered, setHovered] = useState(false)
   const [arrowsVisible, setArrowsVisible] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -42,19 +43,22 @@ export default function Hero() {
     setTransitioning(true)
     setNextIndex(index)
     setBadgeVisible(false)
-    // Fade out tagline
-    setTaglineVisible(false)
+    // Load incoming tagline into the inactive layer, then swap — simultaneous crossfade
+    if (activeLayer === 'a') {
+      setTaglineB(heroSlides[index])
+      setActiveLayer('b')
+    } else {
+      setTaglineA(heroSlides[index])
+      setActiveLayer('a')
+    }
     setTimeout(() => {
       setCurrentIndex(index)
-      setDisplayedTaglineIndex(index)
       setNextIndex(null)
       setTransitioning(false)
       transitioningRef.current = false
       setBadgeVisible(true)
-      // Fade in tagline after a short delay
-      setTimeout(() => setTaglineVisible(true), 200)
     }, FADE_DURATION)
-  }, [currentIndex])
+  }, [currentIndex, activeLayer])
 
   const advance = useCallback(() => {
     goToSlide((currentIndex + 1) % heroSlides.length)
@@ -75,7 +79,6 @@ export default function Hero() {
 
   const current = heroSlides[currentIndex]
   const next = nextIndex !== null ? heroSlides[nextIndex] : null
-  const taglineSlide = heroSlides[displayedTaglineIndex]
 
   return (
     <section style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden', background: '#FDFCF9' }}>
@@ -99,19 +102,29 @@ export default function Hero() {
             Handcrafted in South Africa
           </p>
 
-          {/* Dynamic tagline */}
-          <h1
-            className="font-cormorant font-semibold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-ink leading-[1.05] mb-6"
-            style={{
-              opacity: taglineVisible ? 1 : 0,
-              transform: taglineVisible ? 'translateY(0)' : 'translateY(-10px)',
-              transition: 'opacity 300ms ease, transform 300ms ease',
-            }}
-          >
-            {taglineSlide.tagline}<br />
-            <span className="italic" style={{ color: '#C8A97E' }}>{taglineSlide.taglineItalic}</span><br />
-            {taglineSlide.taglineEnd}
-          </h1>
+          {/* Dynamic tagline — dual-layer crossfade */}
+          <div className="relative mb-6" style={{ height: 'clamp(160px, 22vw, 280px)' }}>
+            {(['a', 'b'] as const).map(layer => {
+              const slide = layer === 'a' ? taglineA : taglineB
+              const isActive = activeLayer === layer
+              return (
+                <h1
+                  key={layer}
+                  className="font-cormorant font-semibold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-ink leading-[1.05]"
+                  style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%',
+                    opacity: isActive ? 1 : 0,
+                    transition: `opacity 600ms ease-in-out`,
+                    pointerEvents: isActive ? 'auto' : 'none',
+                  }}
+                >
+                  {slide.tagline}<br />
+                  <span className="italic" style={{ color: '#C8A97E' }}>{slide.taglineItalic}</span><br />
+                  {slide.taglineEnd}
+                </h1>
+              )
+            })}
+          </div>
 
           <p className="font-dm text-base lg:text-lg text-ink-light leading-relaxed mb-10 max-w-md">
             Luxury espadrilles handcrafted with French and Spanish inspiration. Comfort in every way.
