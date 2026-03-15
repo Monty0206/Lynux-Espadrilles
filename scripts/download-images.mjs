@@ -1,12 +1,12 @@
-import { createWriteStream, existsSync, mkdirSync } from 'fs'
+import { createWriteStream, existsSync, mkdirSync, statSync, unlinkSync } from 'fs'
 import { pipeline } from 'stream/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const OUT_DIR = path.join(__dirname, '..', 'public', 'images')
+const OUTPUT_DIR = path.join(__dirname, '..', 'public', 'images')
 
-if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
+if (!existsSync(OUTPUT_DIR)) mkdirSync(OUTPUT_DIR, { recursive: true })
 
 const images = [
   { url: "https://lynuxespadrilles.co.za/wp-content/uploads/2022/07/Ariana-Strips.png", filename: "ariana.png" },
@@ -34,36 +34,52 @@ const images = [
   { url: "https://lynuxespadrilles.co.za/wp-content/uploads/2022/07/Ximera-800x800.jpg", filename: "ximera-leather.jpg" },
   { url: "https://lynuxespadrilles.co.za/wp-content/uploads/2022/07/FLORENCIA-CERRADA.jpg", filename: "about-hero.jpg" },
   { url: "https://lynuxespadrilles.co.za/wp-content/uploads/2013/06/LynettShoe2.jpg", filename: "homepage-banner.jpg" },
-  { url: "https://lynuxespadrilles.co.za/wp-content/uploads/2023/04/Lynux-Espadrilles-Logo-Name-removebg-preview-1-e1681983614777.png", filename: "logo.png" }
+  { url: "https://lynuxespadrilles.co.za/wp-content/uploads/2023/04/Lynux-Espadrilles-Logo-Name-removebg-preview-1-e1681983614777.png", filename: "logo.png" },
 ]
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms) => new Promise(r => setTimeout(r, ms))
 
-async function downloadImage({ url, filename }) {
-  const dest = path.join(OUT_DIR, filename)
-  if (existsSync(dest)) {
-    console.log(`⏭  Skipping (exists): ${filename}`)
-    return
-  }
+async function downloadOne(url, filename, attempt = 1) {
+  const dest = path.join(OUTPUT_DIR, filename)
   try {
     const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; LynuxImageFetcher/1.0)',
-        'Referer': 'https://lynuxespadrilles.co.za/'
-      }
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+      signal: AbortSignal.timeout(30000),
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const writer = createWriteStream(dest)
-    await pipeline(res.body, writer)
-    console.log(`✓  Downloaded: ${filename}`)
+    const ws = createWriteStream(dest)
+    await pipeline(res.body, ws)
+    const size = statSync(dest).size
+    if (size === 0) {
+      unlinkSync(dest)
+      throw new Error('File is 0 bytes')
+    }
+    console.log(`SUCCESS ${filename} (${(size / 1024).toFixed(1)} KB)`)
+    return true
   } catch (err) {
-    console.error(`✗  Failed: ${filename} — ${err.message}`)
+    if (existsSync(dest)) { try { unlinkSync(dest) } catch {} }
+    if (attempt < 3) {
+      console.log(`RETRY ${filename} (attempt ${attempt + 1})`)
+      await delay(1000)
+      return downloadOne(url, filename, attempt + 1)
+    }
+    console.log(`FAILED ${filename} — ${err.message}`)
+    return false
   }
 }
 
-for (const img of images) {
-  await downloadImage(img)
+let ok = 0, fail = 0
+const failed = []
+
+for (const { url, filename } of images) {
+  const success = await downloadOne(url, filename)
+  if (success) ok++
+  else { fail++; failed.push(filename) }
   await delay(300)
 }
 
-console.log('\nDone.')
+console.log(`\nDownloaded: ${ok}/${images.length} files`)
+if (failed.length) {
+  console.log('Failed files:')
+  failed.forEach(f => console.log('  -', f))
+}

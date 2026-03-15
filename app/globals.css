@@ -29,3 +29,8 @@
     font-family: var(--font-cormorant), serif;
   }
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

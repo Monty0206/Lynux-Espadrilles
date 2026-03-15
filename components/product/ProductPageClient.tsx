@@ -1,15 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getProductBySlug, getAllProducts } from '@/lib/products'
 import { useCart } from '@/app/context/CartContext'
 import ProductCard from '@/components/shop/ProductCard'
-import { Product } from '@/types'
 
 const formatPrice = (price: number): string =>
   'R' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+const LIGHT_COLOURS = ['Ivory', 'White', 'Nude', 'Baby Pink']
 
 function StarRating({ rating, size = 16 }: { rating: number; size?: number }) {
   return (
@@ -72,6 +73,8 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   const product = getProductBySlug(slug)
 
   const [mainImage, setMainImage] = useState<string>(product?.images[0] ?? '')
+  const [imageOpacity, setImageOpacity] = useState(1)
+  const [colourBadge, setColourBadge] = useState<string | null>(null)
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [selectedJute, setSelectedJute] = useState<string | null>(null)
   const [selectedToe, setSelectedToe] = useState<string | null>(null)
@@ -79,12 +82,9 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   const [quantity, setQuantity] = useState(1)
   const [showSizeGuide, setShowSizeGuide] = useState(false)
   const [addedToCart, setAddedToCart] = useState(false)
-  const [imageTransition, setImageTransition] = useState(true)
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
+  const [tooltipTimeout, setTooltipTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
   const { addToCart } = useCart()
-
-  useEffect(() => {
-    if (product && !mainImage) setMainImage(product.images[0])
-  }, [product, mainImage])
 
   if (!product) {
     return (
@@ -117,9 +117,28 @@ export default function ProductPageClient({ slug }: { slug: string }) {
     return `Please select ${missing.join(' and ')} to continue`
   }
 
-  const handleSwitchImage = (img: string) => {
-    setImageTransition(false)
-    setTimeout(() => { setMainImage(img); setImageTransition(true) }, 150)
+  const switchImage = (newSrc: string) => {
+    if (newSrc === mainImage) return
+    setImageOpacity(0)
+    setTimeout(() => {
+      setMainImage(newSrc)
+      setImageOpacity(1)
+    }, 150)
+  }
+
+  const handleColourSelect = (colourName: string) => {
+    setSelectedColour(colourName)
+    const colour = product.colours.find(c => c.name === colourName)
+    if (colour?.image) {
+      setColourBadge(null)
+      switchImage(colour.image)
+    } else {
+      setColourBadge(colourName)
+    }
+  }
+
+  const handleThumbnailClick = (img: string) => {
+    switchImage(img)
   }
 
   const handleAddToCart = () => {
@@ -127,6 +146,17 @@ export default function ProductPageClient({ slug }: { slug: string }) {
     addToCart(product, selectedSize!, selectedColour ?? '', selectedJute ?? '', selectedToe ?? '', quantity)
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 2000)
+  }
+
+  const handleTooltipEnter = (name: string) => {
+    if (tooltipTimeout) clearTimeout(tooltipTimeout)
+    const t = setTimeout(() => setActiveTooltip(name), 200)
+    setTooltipTimeout(t)
+  }
+
+  const handleTooltipLeave = () => {
+    if (tooltipTimeout) clearTimeout(tooltipTimeout)
+    setActiveTooltip(null)
   }
 
   const pillClass = (active: boolean) =>
@@ -156,21 +186,32 @@ export default function ProductPageClient({ slug }: { slug: string }) {
             {/* Gallery */}
             <div>
               <div className="relative aspect-square bg-sand overflow-hidden mb-4">
-                {mainImage && <Image
-                  src={mainImage}
-                  alt={product.name}
-                  fill
-                  className={`object-cover transition-opacity duration-300 ${imageTransition ? 'opacity-100' : 'opacity-0'}`}
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  priority
-                />}
+                {mainImage && (
+                  <Image
+                    src={mainImage}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    style={{ opacity: imageOpacity, transition: 'opacity 150ms ease' }}
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    priority
+                  />
+                )}
+                {colourBadge && (
+                  <div
+                    className="absolute bottom-3 left-3 bg-clay text-cream px-3 py-1 text-sm font-dm"
+                    style={{ borderRadius: '999px', animation: 'fadeIn 150ms ease' }}
+                  >
+                    Available in {colourBadge}
+                  </div>
+                )}
               </div>
               {product.images.length > 1 && (
                 <div className="flex gap-3 flex-wrap">
                   {product.images.map((img, i) => (
                     <button
                       key={i}
-                      onClick={() => handleSwitchImage(img)}
+                      onClick={() => handleThumbnailClick(img)}
                       className={`relative w-20 h-20 flex-shrink-0 overflow-hidden border-2 transition-all duration-200 ${
                         mainImage === img ? 'border-clay' : 'border-transparent hover:border-sand-dark'
                       }`}
@@ -268,24 +309,49 @@ export default function ProductPageClient({ slug }: { slug: string }) {
               {needsColour && (
                 <div className="mb-6">
                   <p className="font-dm text-xs uppercase tracking-[0.15em] text-ink font-medium mb-3">
-                    Colour{selectedColour ? `: ${selectedColour}` : ''}
+                    {selectedColour
+                      ? <>Select Colour — <span style={{ color: '#C8A97E' }}>{selectedColour}</span></>
+                      : 'Select Colour'
+                    }
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    {product.colours.map(colour => (
-                      <button
-                        key={colour.name}
-                        onClick={() => setSelectedColour(colour.name)}
-                        title={colour.name}
-                        className="transition-all duration-200 hover:scale-110 flex-shrink-0"
-                        style={{
-                          width: '36px', height: '36px', borderRadius: '50%',
-                          background: colour.hex ? colour.hex : 'conic-gradient(red, yellow, green, blue, purple, red)',
-                          border: (colour.hex === '#FDFCF9' || colour.hex === '#FFFFF0') ? '1px solid #EAE3D2' : 'none',
-                          outline: selectedColour === colour.name ? '2px solid #C8A97E' : 'none',
-                          outlineOffset: '3px',
-                        }}
-                      />
-                    ))}
+                    {product.colours.map(colour => {
+                      const isLight = LIGHT_COLOURS.includes(colour.name)
+                      const isSelected = selectedColour === colour.name
+                      return (
+                        <div key={colour.name} className="relative flex flex-col items-center">
+                          {activeTooltip === colour.name && (
+                            <div
+                              className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-[11px] font-dm text-cream pointer-events-none z-10"
+                              style={{ background: '#1C1A17' }}
+                            >
+                              {colour.name}
+                            </div>
+                          )}
+                          <button
+                            onClick={() => handleColourSelect(colour.name)}
+                            onMouseEnter={() => handleTooltipEnter(colour.name)}
+                            onMouseLeave={handleTooltipLeave}
+                            title={colour.name}
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '50%',
+                              background: colour.hex
+                                ? colour.hex
+                                : 'conic-gradient(#FF6B6B, #FFD93D, #6BCB77, #4D96FF, #C77DFF, #FF6B6B)',
+                              border: isLight ? '1px solid #E0D8CC' : 'none',
+                              outline: isSelected ? '3px solid #C8A97E' : 'none',
+                              outlineOffset: '3px',
+                              transform: isSelected ? 'scale(1.15)' : 'scale(1)',
+                              transition: 'all 200ms ease',
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                            }}
+                          />
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )}

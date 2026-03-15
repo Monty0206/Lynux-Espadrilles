@@ -9,6 +9,8 @@ interface ProductCardProps {
 const formatPrice = (price: number): string =>
   'R' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
+const LIGHT_COLOURS = ['Ivory', 'White', 'Nude', 'Baby Pink']
+
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-1">
@@ -31,6 +33,11 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const MAX_SWATCHES = 5
+  const hasColours = product.colours && product.colours.length > 0
+  const visibleColours = hasColours ? product.colours.slice(0, MAX_SWATCHES) : []
+  const extraCount = hasColours ? product.colours.length - MAX_SWATCHES : 0
+
   return (
     <Link href={`/product/${product.slug}`} className="group block">
       <div className="relative aspect-square overflow-hidden bg-sand">
@@ -63,6 +70,40 @@ export default function ProductCard({ product }: ProductCardProps) {
             : formatPrice(product.price)
           }
         </p>
+        {hasColours && (
+          <div className="mt-2">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {visibleColours.map(colour => {
+                const isLight = LIGHT_COLOURS.includes(colour.name)
+                return (
+                  <span
+                    key={colour.name}
+                    title={colour.name}
+                    style={{
+                      display: 'inline-block',
+                      width: '14px',
+                      height: '14px',
+                      borderRadius: '50%',
+                      background: colour.hex
+                        ? colour.hex
+                        : 'conic-gradient(#FF6B6B, #FFD93D, #6BCB77, #4D96FF, #C77DFF, #FF6B6B)',
+                      border: isLight ? '1px solid #E0D8CC' : 'none',
+                      flexShrink: 0,
+                    }}
+                  />
+                )
+              })}
+              {extraCount > 0 && (
+                <span className="font-dm text-ink-light" style={{ fontSize: '12px' }}>
+                  +{extraCount} more
+                </span>
+              )}
+            </div>
+            <p className="font-dm text-ink-light mt-0.5" style={{ fontSize: '11px' }}>
+              {product.colours.length} colour{product.colours.length !== 1 ? 's' : ''} available
+            </p>
+          </div>
+        )}
       </div>
     </Link>
   )
