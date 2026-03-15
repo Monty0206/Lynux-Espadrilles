@@ -7,6 +7,8 @@ import { getProductBySlug, getAllProducts } from '@/lib/products'
 import { useCart } from '@/app/context/CartContext'
 import ProductCard from '@/components/shop/ProductCard'
 import { Colour } from '@/types'
+import { useWishlist } from '@/app/context/WishlistContext'
+import Toast, { useToast } from '@/components/ui/Toast'
 
 const formatPrice = (price: number): string =>
   'R' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -86,7 +88,10 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
   const [tooltipTimeout, setTooltipTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
   const [stickyVisible, setStickyVisible] = useState(false)
+  const [heartScale, setHeartScale] = useState(1)
   const { addToCart } = useCart()
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist()
+  const { toast, showToast } = useToast()
 
   // Sticky bar scroll listener
   useEffect(() => {
@@ -173,6 +178,7 @@ export default function ProductPageClient({ slug }: { slug: string }) {
   return (
     <>
       {showSizeGuide && <SizeGuideModal onClose={() => setShowSizeGuide(false)} />}
+      <Toast message={toast.message} visible={toast.visible} />
 
       {/* ── Sticky add-to-cart bar ── */}
       <div
@@ -273,7 +279,42 @@ export default function ProductPageClient({ slug }: { slug: string }) {
             {/* Product Info */}
             <div className="flex flex-col">
               <p className="font-dm text-xs tracking-[0.2em] uppercase text-clay mb-3">Lynux Collection</p>
-              <h1 className="font-cormorant font-semibold text-4xl lg:text-5xl text-ink mb-4 leading-tight">{product.name}</h1>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <h1 className="font-cormorant font-semibold text-4xl lg:text-5xl text-ink leading-tight">{product.name}</h1>
+                <button
+                  onClick={() => {
+                    setHeartScale(1.25)
+                    setTimeout(() => setHeartScale(1), 200)
+                    if (isInWishlist(product.id)) {
+                      removeFromWishlist(product.id)
+                      showToast('Removed from wishlist')
+                    } else {
+                      addToWishlist(product)
+                      showToast(`${product.name} added to wishlist`)
+                    }
+                  }}
+                  title={isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                  aria-label={isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                  style={{
+                    flexShrink: 0,
+                    width: 44, height: 44, borderRadius: '50%',
+                    background: 'white',
+                    border: '1px solid #EAE3D2',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer',
+                    transform: `scale(${heartScale})`,
+                    transition: 'transform 200ms ease',
+                    marginTop: 4,
+                  }}
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24"
+                    fill={isInWishlist(product.id) ? '#E53E3E' : 'none'}
+                    stroke={isInWishlist(product.id) ? '#E53E3E' : '#9E9693'}
+                    strokeWidth="1.8">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </button>
+              </div>
 
               {product.rating && (
                 <div className="flex items-center gap-2 mb-4">
