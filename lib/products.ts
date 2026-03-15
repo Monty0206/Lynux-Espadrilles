@@ -17,7 +17,7 @@ export const products: Product[] = [
       { name: "Ivory", hex: "#FFFFF0", image: null },
       { name: "Khaki", hex: "#C3B091", image: null },
       { name: "Multi-Color", hex: null, image: null },
-      { name: "Mustard", hex: "#FFDB58", image: null },
+      { name: "Mustard", hex: "#FFDB58", image: "/images/ariana.png" },
       { name: "Navy", hex: "#003153", image: null },
       { name: "Nude", hex: "#E8CFB0", image: null },
       { name: "Olive", hex: "#6B7C45", image: null },
@@ -26,7 +26,14 @@ export const products: Product[] = [
       { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/ariana.png",
-    images: ["/images/ariana.png"],
+    images: [
+      "/images/ariana.png",
+      "/images/ariana-2.jpg",
+      "/images/ariana-3.jpg",
+      "/images/ariana-4.jpg",
+      "/images/ariana-5.jpg",
+      "/images/ariana-6.jpg"
+    ],
     category: "Lynux",
     featured: false,
     rating: null,
@@ -44,13 +51,19 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double"],
     toeOptions: [],
     colours: [
-      { name: "Baby Pink", hex: "#F4C2C2", image: null },
+      { name: "Baby Pink", hex: "#F4C2C2", image: "/images/carnero-slipper-2.jpg" },
       { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Cream", hex: "#F5F0E8", image: null },
-      { name: "Mustard", hex: "#FFDB58", image: null }
+      { name: "Cream", hex: "#FFFDD0", image: null },
+      { name: "Mustard", hex: "#FFDB58", image: "/images/carnero-slipper.jpg" }
     ],
     image: "/images/carnero-slipper.jpg",
-    images: ["/images/carnero-slipper.jpg"],
+    images: [
+      "/images/carnero-slipper.jpg",
+      "/images/carnero-slipper-2.jpg",
+      "/images/carnero-slipper-3.jpg",
+      "/images/carnero-slipper-4.jpg",
+      "/images/carnero-slipper-5.jpg"
+    ],
     category: "Lynux",
     featured: false,
     rating: null,
@@ -69,7 +82,7 @@ export const products: Product[] = [
     toeOptions: [],
     colours: [
       { name: "Baby Pink", hex: "#F4C2C2", image: null },
-      { name: "Black", hex: "#1C1A17", image: null },
+      { name: "Black", hex: "#1C1A17", image: "/images/florencia-cerrada.jpg" },
       { name: "Ivory", hex: "#FFFFF0", image: null },
       { name: "Khaki", hex: "#C3B091", image: null },
       { name: "Mustard", hex: "#FFDB58", image: null },
@@ -79,7 +92,10 @@ export const products: Product[] = [
       { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/florencia-cerrada.jpg",
-    images: ["/images/florencia-cerrada.jpg"],
+    images: [
+      "/images/florencia-cerrada.jpg",
+      "/images/florencia-cerrada-2.jpg"
+    ],
     category: "Lynux",
     featured: true,
     rating: null,
@@ -103,10 +119,13 @@ export const products: Product[] = [
       { name: "Mustard", hex: "#FFDB58", image: null },
       { name: "Navy", hex: "#003153", image: null },
       { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "White", hex: "#FDFCF9", image: null }
+      { name: "White", hex: "#FDFCF5", image: null }
     ],
     image: "/images/lucia-wedge.png",
-    images: ["/images/lucia-wedge.png"],
+    images: [
+      "/images/lucia-wedge.png",
+      "/images/lucia-wedge-2.png"
+    ],
     category: "Lynux",
     featured: true,
     rating: null,
@@ -152,13 +171,21 @@ export const products: Product[] = [
     toeOptions: [],
     colours: [
       { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Blue", hex: "#4A6FA5", image: null },
-      { name: "Natural", hex: "#E8D5B7", image: null },
+      { name: "Blue", hex: "#4169E1", image: "/images/the-bella-5.jpg" },
+      { name: "Natural", hex: "#C8B89A", image: null },
       { name: "Orange", hex: "#E07B39", image: null },
-      { name: "Red", hex: "#C0392B", image: null }
+      { name: "Red", hex: "#C0392B", image: "/images/the-bella.jpg" }
     ],
     image: "/images/the-bella.jpg",
-    images: ["/images/the-bella.jpg"],
+    images: [
+      "/images/the-bella.jpg",
+      "/images/the-bella-2.jpg",
+      "/images/the-bella-3.jpg",
+      "/images/the-bella-4.jpg",
+      "/images/the-bella-5.jpg",
+      "/images/the-bella-6.jpg",
+      "/images/the-bella-7.jpg"
+    ],
     category: "Lynux",
     featured: false,
     rating: null,
@@ -233,8 +260,7 @@ export const products: Product[] = [
     toeOptions: ["Open Toe", "Closed Toe"],
     colours: [
       { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Brown", hex: "#7B4F2E", image: "/images/the-mule-2.jpg" },
-      { name: "Lime", hex: "#A8CF00", image: null }
+      { name: "Brown", hex: "#7B4F2E", image: "/images/the-mule-2.jpg" }
     ],
     image: "/images/the-mule.webp",
     images: [
@@ -266,7 +292,7 @@ export const products: Product[] = [
       { name: "Grey", hex: "#9E9E9E", image: null },
       { name: "Ivory", hex: "#FFFFF0", image: null },
       { name: "Khaki", hex: "#C3B091", image: null },
-      { name: "Multi-Color", hex: null, image: null },
+      { name: "Multi-Color", hex: null, image: "/images/the-tina.jpg" },
       { name: "Mustard", hex: "#FFDB58", image: null },
       { name: "Navy", hex: "#003153", image: null },
       { name: "Olive", hex: "#6B7C45", image: null },
@@ -276,7 +302,12 @@ export const products: Product[] = [
       { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/the-tina.jpg",
-    images: ["/images/the-tina.jpg"],
+    images: [
+      "/images/the-tina.jpg",
+      "/images/the-tina-2.jpg",
+      "/images/the-tina-3.jpg",
+      "/images/the-tina-4.jpg"
+    ],
     category: "Lynux",
     featured: false,
     rating: null,
@@ -304,13 +335,21 @@ export const products: Product[] = [
       { name: "Navy", hex: "#003153", image: null },
       { name: "Nude", hex: "#E8CFB0", image: null },
       { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "Orange", hex: "#E07B39", image: null },
+      { name: "Orange", hex: "#E07B39", image: "/images/valeria-orange.png" },
       { name: "Red", hex: "#C0392B", image: null },
       { name: "Rustic", hex: "#8B4513", image: null },
       { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/valeria.png",
-    images: ["/images/valeria.png"],
+    images: [
+      "/images/valeria.png",
+      "/images/valeria-orange.png",
+      "/images/valeria-2.jpg",
+      "/images/valeria-3.jpg",
+      "/images/valeria-4.jpg",
+      "/images/valeria-5.jpg",
+      "/images/valeria-6.jpg"
+    ],
     category: "Lynux",
     featured: false,
     rating: null,
