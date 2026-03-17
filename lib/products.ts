@@ -227,16 +227,16 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double"],
     toeOptions: ["Open Toe", "Closed Toe"],
     colours: [
-      { name: "Brown", hex: "#7B4F2E", image: "/images/the-mule.webp" },
-      { name: "Black", hex: "#1C1A17", image: "/images/the-mule-2.jpg" },
-      { name: "Leopard Print", hex: null, image: "/images/the-mule-4.jpg" },
+      { name: "Leopard Print", hex: null, image: "/images/the-mule.webp" },
+      { name: "Brown", hex: "#7B4F2E", image: "/images/the-mule-2.jpg" },
+      { name: "Black", hex: "#1C1A17", image: "/images/the-mule-3.jpg" },
     ],
     image: "/images/the-mule.webp",
     images: [
       "/images/the-mule.webp",
       "/images/the-mule-2.jpg",
-      "/images/the-mule-4.jpg",
       "/images/the-mule-3.jpg",
+      "/images/the-mule-4.jpg",
       "/images/the-mule-5.webp"
     ],
     category: "Lynux",
