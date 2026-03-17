@@ -229,7 +229,7 @@ export const products: Product[] = [
     colours: [
       { name: "Leopard Print", hex: null, image: "/images/the-mule.webp" },
       { name: "Brown", hex: "#7B4F2E", image: "/images/the-mule-2.jpg" },
-      { name: "Black", hex: "#1C1A17", image: "/images/the-mule-3.jpg" },
+      { name: "Black", hex: "#1C1A17", image: "/images/the-mule-4.jpg" },
     ],
     image: "/images/the-mule.webp",
     images: [
