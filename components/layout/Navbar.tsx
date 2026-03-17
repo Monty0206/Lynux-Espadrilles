@@ -77,9 +77,15 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <Link href="/" className="flex flex-col leading-none flex-shrink-0">
-              <span className="font-cormorant font-semibold text-2xl lg:text-3xl text-ink tracking-wide">Lynux</span>
-              <span className="font-dm text-[10px] lg:text-xs text-ink-light tracking-[0.2em] uppercase">Espadrilles</span>
+            <Link href="/" className="flex-shrink-0">
+              <Image
+                src="/images/logo.png"
+                alt="Lynux Espadrilles"
+                width={110}
+                height={70}
+                className="h-14 w-auto"
+                priority
+              />
             </Link>
 
             {/* Desktop Nav */}
