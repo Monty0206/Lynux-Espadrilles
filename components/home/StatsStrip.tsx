@@ -7,7 +7,7 @@ const stats = [
   { value: 11,   suffix: '',  label: 'Styles Available' },
   { value: 12,   suffix: '+', label: 'Colours Per Style' },
   { value: 100,  suffix: '%', label: 'Handcrafted'       },
-  { value: 2020, suffix: '',  label: 'Founded'           },
+  { value: 2023, suffix: '',  label: 'Founded'           },
 ]
 
 function AnimatedCounter({ value, suffix, delay, label }: { value: number; suffix: string; delay: number; label: string }) {
