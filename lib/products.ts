@@ -33,7 +33,8 @@ export const products: Product[] = [
       "/images/ariana-3.jpg",
       "/images/ariana-4.jpg",
       "/images/ariana-5.jpg",
-      "/images/ariana-6.jpg"
+      "/images/ariana-6.jpg",
+      "/images/lucia-wedge-2.png"
     ],
     category: "Lynux",
     featured: false,
@@ -126,7 +127,6 @@ export const products: Product[] = [
     image: "/images/lucia-wedge.png",
     images: [
       "/images/lucia-wedge.png",
-      "/images/lucia-wedge-2.png"
     ],
     category: "Lynux",
     featured: true,
