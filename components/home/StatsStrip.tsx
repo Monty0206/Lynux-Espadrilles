@@ -11,7 +11,8 @@ const stats = [
 ]
 
 function AnimatedCounter({ value, suffix, delay, label }: { value: number; suffix: string; delay: number; label: string }) {
-  const [count, setCount] = useState(0)
+  const startFrom = value > 1000 ? Math.floor(value / 100) * 100 : 0
+  const [count, setCount] = useState(startFrom)
   const { ref, isVisible } = useScrollAnimation(0.3)
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function AnimatedCounter({ value, suffix, delay, label }: { value: number; suffi
       setCount(value)
       return
     }
+    setCount(startFrom)
     const timeout = setTimeout(() => {
       const start = Date.now()
       const duration = 2000
@@ -28,7 +30,7 @@ function AnimatedCounter({ value, suffix, delay, label }: { value: number; suffi
         const elapsed = Date.now() - start
         const progress = Math.min(elapsed / duration, 1)
         const eased = 1 - Math.pow(1 - progress, 3)
-        setCount(Math.round(eased * value))
+        setCount(Math.round(startFrom + eased * (value - startFrom)))
         if (progress < 1) requestAnimationFrame(animate)
       }
       requestAnimationFrame(animate)
