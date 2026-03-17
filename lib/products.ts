@@ -49,9 +49,8 @@ export const products: Product[] = [
     toeOptions: [],
     colours: [
       { name: "Baby Pink", hex: "#F4C2C2", image: "/images/carnero-slipper-2.jpg" },
-      { name: "Black", hex: "#1C1A17", image: null },
       { name: "Cream", hex: "#FFFDD0", image: "/images/carnero-slipper-5.jpg" },
-      { name: "Mustard", hex: "#FFDB58", image: "/images/carnero-slipper.jpg" }
+      { name: "Mustard", hex: "#FFDB58", image: "/images/carnero-slipper.jpg" },
     ],
     image: "/images/carnero-slipper.jpg",
     images: [
@@ -78,15 +77,7 @@ export const products: Product[] = [
     juteOptions: [],
     toeOptions: [],
     colours: [
-      { name: "Baby Pink", hex: "#F4C2C2", image: null },
       { name: "Black", hex: "#1C1A17", image: "/images/florencia-cerrada.jpg" },
-      { name: "Ivory", hex: "#FFFFF0", image: null },
-      { name: "Khaki", hex: "#C3B091", image: null },
-      { name: "Mustard", hex: "#FFDB58", image: null },
-      { name: "Navy", hex: "#003153", image: null },
-      { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "Red", hex: "#C0392B", image: null },
-      { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/florencia-cerrada.jpg",
     images: [
@@ -110,14 +101,7 @@ export const products: Product[] = [
     juteOptions: [],
     toeOptions: [],
     colours: [
-      { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Khaki", hex: "#C3B091", image: null },
       { name: "Leopard Print", hex: null, image: "/images/lucia-wedge.png" },
-      { name: "Mustard", hex: "#FFDB58", image: null },
-      { name: "Navy", hex: "#003153", image: null },
-      { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "Red Gingham", hex: null, image: null },
-      { name: "White", hex: "#FDFCF5", image: null }
     ],
     image: "/images/lucia-wedge.png",
     images: [
@@ -139,15 +123,7 @@ export const products: Product[] = [
     sizes: [3,4,5,6,7,8,9],
     juteOptions: ["Flat", "Double"],
     toeOptions: [],
-    colours: [
-      { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Grey", hex: "#9E9E9E", image: null },
-      { name: "Khaki", hex: "#C3B091", image: null },
-      { name: "Mustard", hex: "#FFDB58", image: null },
-      { name: "Navy", hex: "#003153", image: null },
-      { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "White", hex: "#FDFCF9", image: null }
-    ],
+    colours: [],
     image: "/images/renata.jpg",
     images: ["/images/renata.jpg"],
     category: "Lynux",
@@ -167,13 +143,11 @@ export const products: Product[] = [
     juteOptions: [],
     toeOptions: [],
     colours: [
-      { name: "Black", hex: "#1C1A17", image: null },
       { name: "Blue", hex: "#4169E1", image: "/images/the-bella-5.jpg" },
       { name: "Green", hex: "#5DBB63", image: "/images/the-bella-2.jpg" },
       { name: "Multi-Color", hex: null, image: "/images/the-bella-3.jpg" },
-      { name: "Natural", hex: "#C8B89A", image: null },
       { name: "Orange", hex: "#E07B39", image: "/images/the-bella-7.jpg" },
-      { name: "Red", hex: "#C0392B", image: "/images/the-bella.jpg" }
+      { name: "Red", hex: "#C0392B", image: "/images/the-bella.jpg" },
     ],
     image: "/images/the-bella.jpg",
     images: [
@@ -202,18 +176,12 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double"],
     toeOptions: [],
     colours: [
-      { name: "Baby Pink", hex: "#F4C2C2", image: null },
       { name: "Black", hex: "#1C1A17", image: "/images/the-lynux-3.jpg" },
-      { name: "Grey", hex: "#9E9E9E", image: null },
-      { name: "Ivory", hex: "#FFFFF0", image: null },
       { name: "Khaki", hex: "#C3B091", image: "/images/the-lynux-6.jpg" },
       { name: "Multi-Color", hex: null, image: "/images/the-lynux.png" },
       { name: "Navy", hex: "#003153", image: "/images/the-lynux-7.jpg" },
       { name: "Nude", hex: "#E8CFB0", image: "/images/the-lynux-4.jpg" },
       { name: "Olive", hex: "#6B7C45", image: "/images/the-lynux-5.jpg" },
-      { name: "Orange", hex: "#E07B39", image: null },
-      { name: "Rustic", hex: "#8B4513", image: null },
-      { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/the-lynux.png",
     images: [
@@ -286,20 +254,10 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double", "Low Wedge Sole", "Medium Wedge Sole", "High Wedge Sole"],
     toeOptions: [],
     colours: [
-      { name: "Baby Pink", hex: "#F4C2C2", image: null },
       { name: "Black", hex: "#1C1A17", image: "/images/the-tina-2.jpg" },
-      { name: "Grey", hex: "#9E9E9E", image: null },
       { name: "Ivory", hex: "#FFFFF0", image: "/images/the-tina-3.jpg" },
-      { name: "Khaki", hex: "#C3B091", image: null },
       { name: "Multi-Color", hex: null, image: "/images/the-tina.jpg" },
-      { name: "Mustard", hex: "#FFDB58", image: null },
       { name: "Natural", hex: "#C8B89A", image: "/images/the-tina-4.jpg" },
-      { name: "Navy", hex: "#003153", image: null },
-      { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "Orange", hex: "#E07B39", image: null },
-      { name: "Red", hex: "#C0392B", image: null },
-      { name: "Rustic", hex: "#8B4513", image: null },
-      { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/the-tina.jpg",
     images: [
@@ -326,19 +284,11 @@ export const products: Product[] = [
     toeOptions: [],
     colours: [
       { name: "Baby Pink", hex: "#F4C2C2", image: "/images/valeria-6.jpg" },
-      { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Grey", hex: "#9E9E9E", image: null },
-      { name: "Ivory", hex: "#FFFFF0", image: null },
       { name: "Khaki", hex: "#C3B091", image: "/images/valeria-2.jpg" },
       { name: "Multi-Color", hex: null, image: "/images/valeria.png" },
-      { name: "Mustard", hex: "#FFDB58", image: null },
-      { name: "Navy", hex: "#003153", image: null },
-      { name: "Nude", hex: "#E8CFB0", image: null },
       { name: "Olive", hex: "#6B7C45", image: "/images/valeria-5.jpg" },
       { name: "Orange", hex: "#E07B39", image: "/images/valeria-orange.png" },
-      { name: "Red", hex: "#C0392B", image: null },
-      { name: "Rustic", hex: "#8B4513", image: null },
-      { name: "White", hex: "#FDFCF9", image: "/images/valeria-3.jpg" }
+      { name: "White", hex: "#FDFCF9", image: "/images/valeria-3.jpg" },
     ],
     image: "/images/valeria.png",
     images: [
@@ -367,8 +317,7 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double", "Medium Wedge Sole", "High Wedge Sole"],
     toeOptions: [],
     colours: [
-      { name: "Black", hex: "#1C1A17", image: null },
-      { name: "Tan", hex: "#C68642", image: "/images/ximera-leather.jpg" }
+      { name: "Tan", hex: "#C68642", image: "/images/ximera-leather.jpg" },
     ],
     image: "/images/ximera-leather.jpg",
     images: ["/images/ximera-leather.jpg"],
