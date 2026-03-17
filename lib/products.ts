@@ -123,7 +123,9 @@ export const products: Product[] = [
     sizes: [3,4,5,6,7,8,9],
     juteOptions: ["Flat", "Double"],
     toeOptions: [],
-    colours: [],
+    colours: [
+      { name: "Khaki", hex: "#C3B091", image: "/images/renata.jpg" },
+    ],
     image: "/images/renata.jpg",
     images: ["/images/renata.jpg"],
     category: "Lynux",
