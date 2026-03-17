@@ -22,7 +22,7 @@ export const products: Product[] = [
       { name: "Navy", hex: "#003153", image: "/images/ariana-4.jpg" },
       { name: "Nude", hex: "#E8CFB0", image: "/images/ariana-6.jpg" },
       { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "Red", hex: "#C0392B", image: null },
+      { name: "Red", hex: "#C0392B", image: "/images/lucia-wedge-2.png" },
       { name: "Rustic", hex: "#8B4513", image: "/images/ariana-3.jpg" },
       { name: "White", hex: "#FDFCF9", image: null }
     ],
@@ -120,7 +120,7 @@ export const products: Product[] = [
       { name: "Mustard", hex: "#FFDB58", image: null },
       { name: "Navy", hex: "#003153", image: null },
       { name: "Olive", hex: "#6B7C45", image: null },
-      { name: "Red Gingham", hex: null, image: "/images/lucia-wedge-2.png" },
+      { name: "Red Gingham", hex: null, image: null },
       { name: "White", hex: "#FDFCF5", image: null }
     ],
     image: "/images/lucia-wedge.png",

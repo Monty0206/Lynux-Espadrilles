@@ -69,7 +69,6 @@ export default function Navbar() {
     { label: 'Home', href: '/' },
     { label: 'Shop', href: '/shop' },
     { label: 'About', href: '/about' },
-    { label: 'Returns', href: '/returns' },
   ]
 
   return (
@@ -119,14 +118,15 @@ export default function Navbar() {
                 )}
               </Link>
 
-              <Link href="/cart" className="relative text-ink-mid hover:text-ink transition-colors duration-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <Link href="/cart" className="relative flex items-center gap-1.5 font-dm text-sm text-ink-mid hover:text-ink transition-colors duration-200 border border-sand-dark hover:border-clay px-3 py-1.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                   <line x1="3" y1="6" x2="21" y2="6"/>
                   <path d="M16 10a4 4 0 0 1-8 0"/>
                 </svg>
+                <span>Go to Cart</span>
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-clay text-cream text-[10px] font-dm font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="bg-clay text-cream text-[10px] font-dm font-semibold rounded-full w-4 h-4 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
