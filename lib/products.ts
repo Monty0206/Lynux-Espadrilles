@@ -147,7 +147,6 @@ export const products: Product[] = [
     colours: [
       { name: "Blue", hex: "#4169E1", image: "/images/the-bella-5.jpg" },
       { name: "Green", hex: "#5DBB63", image: "/images/the-bella-2.jpg" },
-      { name: "Multi-Color", hex: null, image: "/images/the-bella-3.jpg" },
       { name: "Orange", hex: "#E07B39", image: "/images/the-bella-7.jpg" },
       { name: "Red", hex: "#C0392B", image: "/images/the-bella.jpg" },
     ],
