@@ -258,8 +258,6 @@ export const products: Product[] = [
     colours: [
       { name: "Black", hex: "#1C1A17", image: "/images/the-tina-2.jpg" },
       { name: "Ivory", hex: "#FFFFF0", image: "/images/the-tina-3.jpg" },
-      { name: "Multi-Color", hex: null, image: "/images/the-tina.jpg" },
-      { name: "Natural", hex: "#C8B89A", image: "/images/the-tina-4.jpg" },
     ],
     image: "/images/the-tina.jpg",
     images: [
