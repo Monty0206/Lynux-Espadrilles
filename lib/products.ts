@@ -13,18 +13,13 @@ export const products: Product[] = [
     juteOptions: ["Flat", "Double", "Medium Wedge Sole", "High Wedge Sole"],
     toeOptions: [],
     colours: [
-      { name: "Baby Pink", hex: "#F4C2C2", image: null },
       { name: "Black", hex: "#1C1A17", image: "/images/ariana-5.jpg" },
       { name: "Ivory", hex: "#FFFFF0", image: "/images/ariana-2.jpg" },
-      { name: "Khaki", hex: "#C3B091", image: null },
-      { name: "Multi-Color", hex: null, image: null },
       { name: "Mustard", hex: "#FFDB58", image: "/images/ariana.png" },
       { name: "Navy", hex: "#003153", image: "/images/ariana-4.jpg" },
       { name: "Nude", hex: "#E8CFB0", image: "/images/ariana-6.jpg" },
-      { name: "Olive", hex: "#6B7C45", image: null },
       { name: "Red", hex: "#C0392B", image: "/images/lucia-wedge-2.png" },
       { name: "Rustic", hex: "#8B4513", image: "/images/ariana-3.jpg" },
-      { name: "White", hex: "#FDFCF9", image: null }
     ],
     image: "/images/ariana.png",
     images: [
