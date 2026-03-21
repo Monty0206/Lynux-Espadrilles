@@ -13,6 +13,8 @@ const heroSlides = [
   { src: "/images/valeria.png",           name: "Valeria",          price: "From R1,099.00", slug: "valeria",          tagline: "Made",            taglineItalic: "just",       taglineEnd: "for you"   },
   { src: "/images/ariana.png",            name: "Ariana",           price: "From R1,099.00", slug: "ariana",           tagline: "Bold colours,",   taglineItalic: "gentle",     taglineEnd: "comfort"   },
   { src: "/images/carnero-slipper.jpg",   name: "Carnero Slipper",  price: "From R1,299.00", slug: "carnero-slipper",  tagline: "Wrap your feet",  taglineItalic: "in pure",    taglineEnd: "softness"  },
+  { src: "/images/1000038200.jpg",        name: "The Lynux",        price: "From R1,099.00", slug: "the-lynux",        tagline: "Born for",        taglineItalic: "sun &",      taglineEnd: "sea"       },
+  { src: "/images/1000038203.jpg",        name: "The Bella",        price: "From R999.00",   slug: "the-bella",        tagline: "Tied with",       taglineItalic: "intention,", taglineEnd: "worn with love" },
 ]
 
 const INTERVAL = 4000
@@ -103,7 +105,16 @@ export default function Hero() {
           </p>
 
           {/* Dynamic tagline — dual-layer crossfade */}
-          <div className="relative mb-6" style={{ height: 'clamp(160px, 22vw, 280px)' }}>
+          <div className="relative mb-6">
+            {/* Invisible spacer using the longest possible tagline to reserve height */}
+            <h1
+              className="font-cormorant font-semibold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-ink leading-[1.05] invisible pointer-events-none"
+              aria-hidden
+            >
+              Wrap your feet<br />
+              <span className="italic">in pure</span><br />
+              softness
+            </h1>
             {(['a', 'b'] as const).map(layer => {
               const slide = layer === 'a' ? taglineA : taglineB
               const isActive = activeLayer === layer
@@ -177,8 +188,8 @@ export default function Hero() {
         )}
 
         {/* Preload hidden slides */}
-        {heroSlides.slice(1).map(slide => (
-          <Image key={slide.slug} src={slide.src} alt="" fill sizes="1px"
+        {heroSlides.slice(1).map((slide, i) => (
+          <Image key={i} src={slide.src} alt="" fill sizes="1px"
             style={{ opacity: 0, pointerEvents: 'none' }} aria-hidden />
         ))}
 

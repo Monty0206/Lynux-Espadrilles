@@ -26,7 +26,7 @@ interface FormErrors {
 }
 
 export default function CheckoutPage() {
-  const { cartItems, cartTotal } = useCart()
+  const { cartItems, cartTotal, clearCart } = useCart()
   const delivery = 65
   const total = cartTotal + delivery
 
@@ -36,6 +36,8 @@ export default function CheckoutPage() {
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [paymentError, setPaymentError] = useState('')
   const [orderRef] = useState(() => 'LYN-' + Math.floor(1000 + Math.random() * 9000))
 
   const validate = (): boolean => {
@@ -54,15 +56,68 @@ export default function CheckoutPage() {
     return Object.keys(e).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (validate()) setSubmitted(true)
+    if (!validate()) return
+
+    setLoading(true)
+    setPaymentError('')
+
+    try {
+      const res = await fetch('/api/paystack', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email,
+          amount: total,
+          reference: orderRef,
+          metadata: {
+            fullName: form.fullName,
+            phone: form.phone,
+            address: `${form.street}, ${form.suburb}, ${form.city}, ${form.province}, ${form.postalCode}`,
+            notes: form.notes,
+            items: cartItems.map(i => ({
+              name: i.product.name,
+              quantity: i.quantity,
+              size: i.size,
+              colour: i.colour,
+              jute: i.jute,
+              toe: i.toe,
+            })),
+          },
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok || !data.authorizationUrl) {
+        setPaymentError(data.error || 'Could not initialize payment. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      // Redirect to Paystack hosted payment page
+      window.location.href = data.authorizationUrl
+    } catch {
+      setPaymentError('Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   const inputClass = (field: keyof FormErrors) =>
     `w-full font-dm text-sm text-ink border px-4 py-3 bg-cream focus:outline-none focus:border-clay transition-colors duration-200 ${
       errors[field] ? 'border-accent' : 'border-sand-dark'
     }`
+
+  // Payment success — Paystack redirects back with ?reference=... and ?trxref=...
+  // This is handled by checking submitted state set from URL params on mount
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('reference') && !submitted) {
+      clearCart()
+      setSubmitted(true)
+    }
+  }
 
   if (cartItems.length === 0 && !submitted) {
     return (
@@ -88,11 +143,9 @@ export default function CheckoutPage() {
               </svg>
             </div>
           </div>
-          <h1 className="font-cormorant font-semibold text-4xl text-ink mb-4">Thank you for your order!</h1>
+          <h1 className="font-cormorant font-semibold text-4xl text-ink mb-4">Payment Successful!</h1>
           <p className="font-dm text-sm text-ink-light leading-relaxed mb-3">
-            We&apos;ve received your details. Our team will contact you at{' '}
-            <span className="text-ink font-medium">{form.email}</span>{' '}
-            within 24 hours to confirm your order and arrange payment.
+            Thank you for your order. We&apos;ve received your payment and will be in touch within 24 hours to confirm your order and shipping details.
           </p>
           <div className="bg-sand px-6 py-4 mb-8">
             <p className="font-dm text-xs text-ink-light uppercase tracking-widest mb-1">Order Reference</p>
@@ -181,9 +234,23 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <button type="submit" className="w-full py-4 font-dm text-sm font-medium tracking-widest uppercase bg-clay hover:bg-clay-dark text-cream transition-all duration-300">
-              Place Order
+            {paymentError && (
+              <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200">
+                <p className="font-dm text-sm text-red-600">{paymentError}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 font-dm text-sm font-medium tracking-widest uppercase bg-clay hover:bg-clay-dark text-cream transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Redirecting to payment...' : 'Pay Now'}
             </button>
+
+            <p className="font-dm text-xs text-ink-light text-center mt-4">
+              Secured by Paystack · Your payment details are encrypted
+            </p>
           </form>
 
           {/* RIGHT: Order Summary */}
@@ -221,9 +288,6 @@ export default function CheckoutPage() {
                   <span className="font-cormorant font-semibold text-lg text-ink">{formatPrice(total)}</span>
                 </div>
               </div>
-              <p className="font-dm text-xs text-ink-light mt-6 leading-relaxed">
-                Payment details will be provided via email after order confirmation.
-              </p>
             </div>
           </div>
         </div>
