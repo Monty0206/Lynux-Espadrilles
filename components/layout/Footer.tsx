@@ -68,7 +68,7 @@ export default function Footer() {
 
         <div className="border-t border-cream/10 mt-12 pt-8">
           <p className="font-dm text-xs text-cream/40 text-center">
-            © 2026 Lynux Espadrilles. All rights reserved.
+            © 2023–2026 Lynux Espadrilles. All rights reserved.
           </p>
         </div>
       </div>
