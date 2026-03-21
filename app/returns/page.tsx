@@ -31,10 +31,10 @@ export default function ReturnsPage() {
               For any returns or exchange queries, please reach out to us:
             </p>
             <a
-              href="mailto:lynuxespadrille@gmail.com"
+              href="mailto:info@lynuxespadrilles.co.za"
               className="font-dm text-sm text-clay hover:text-clay-dark transition-colors duration-200"
             >
-              lynuxespadrille@gmail.com
+              info@lynuxespadrilles.co.za
             </a>
           </div>
 

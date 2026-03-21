@@ -109,7 +109,7 @@ export default function CartPage() {
               }).join('\n')
               const total = cartTotal
               const msg = `Hi Lynux Espadrilles! I'd like to place an order:\n\n${lines}\n\nSubtotal: R${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}\nDelivery: R65.00\nTotal: R${(total + 65).toLocaleString('en-US', { minimumFractionDigits: 2 })}\n\nPlease confirm availability and payment details. Thank you!`
-              window.open(`https://wa.me/27000000000?text=${encodeURIComponent(msg)}`, '_blank')
+              window.open(`https://wa.me/27786678552?text=${encodeURIComponent(msg)}`, '_blank')
             }}
             className="flex items-center justify-center gap-3 w-full py-4 font-dm text-sm font-medium text-white transition-all duration-300 tracking-wide hover:opacity-90"
             style={{ background: '#25D366' }}
